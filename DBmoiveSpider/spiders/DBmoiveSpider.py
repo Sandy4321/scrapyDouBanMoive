@@ -9,16 +9,16 @@ import re
 from ..items import DbmoivespiderItem
 
 
+
+
 class DBMoiveSpider(CrawlSpider):
     name = "DBmoive"
     allowed_domain = ["movie.douban"]
     start_urls = ["https://movie.douban.com/"]
-
     rules = {
-        Rule(LinkExtractor(allow=r"/subject/\d+/($|\?\w+)"),\
-             callback="parse_moive", follow=True)
+        Rule(LinkExtractor(allow=r"/subject/\d+/($|\?\w+)"), process_request='process_request',\
+             callback='parse_moive', follow=True)
     }
-
     headers = {
         "accept": "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
         "Accept-Encoding": "gzip, deflate, sdch, br",
@@ -28,7 +28,6 @@ class DBMoiveSpider(CrawlSpider):
         "User-Agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.76",
         "Referer": "https://movie.douban.com/"
     }
-
     form_data = {
         'email': 'ziyangsong@foxmail.com',
          'password': 'DIYUJUEWANGszy1'
@@ -51,7 +50,12 @@ class DBMoiveSpider(CrawlSpider):
 
     def after_login(self, response):
         for url in self.start_urls:
-            yield self.make_requests_from_url(url)
+            yield Request(url, meta={'cookiejar':1}, headers = self.headers, dont_filter=True)
+
+
+    def process_request(self, request):
+        request = request.replace(headers=self.headers)
+        return request
 
 
     def parse_moive(self, response):

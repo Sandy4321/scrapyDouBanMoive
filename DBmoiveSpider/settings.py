@@ -37,9 +37,7 @@ COOKIES_ENABLED = False
 
 
 DOWNLOADER_MIDDLEWARES = {
-   'DBmoiveSpider.misc.UserAgent.CustomerUserAgentMiddleware': 400,
-   'DBmoiveSpider.misc.middlewares.CustomerHeaderMiddleware': None,
-
+   'DBmoiveSpider.misc.UserAgentMiddleware.CustomerUserAgentMiddleware': 400
 }
 USER_AGENT = ''
 
