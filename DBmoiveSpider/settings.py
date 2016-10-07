@@ -8,15 +8,11 @@ NEWSPIDER_MODULE = 'DBmoiveSpider.spiders'
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
 
-# Configure maximum concurrent requests performed by Scrapy (default: 16)
-#CONCURRENT_REQUESTS = 32
 
-
-
-DOWNLOAD_DELAY = 2.5
-# The download delay setting will honor only one of:
-#CONCURRENT_REQUESTS_PER_DOMAIN = 16
-#CONCURRENT_REQUESTS_PER_IP = 16
+DOWNLOAD_DELAY = 0.2
+CONCURRENT_ITEMS = 100
+CONCURRENT_REQUESTS = 128
+#The maximum number of concurrent (ie. simultaneous) requests that will be performed to any single domain.
 
 COOKIES_ENABLED = False
 
@@ -39,30 +35,19 @@ COOKIES_ENABLED = False
 DOWNLOADER_MIDDLEWARES = {
    'DBmoiveSpider.misc.UserAgentMiddleware.CustomerUserAgentMiddleware': 400
 }
+
 USER_AGENT = ''
 
-# Enable or disable extensions
-# See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
-#EXTENSIONS = {
-#    'scrapy.extensions.telnet.TelnetConsole': None,
-#}
-
 ITEM_PIPELINES = {
-   'DBmoiveSpider.pipelines.DbmoivespiderPipeline': 1,
+   'DBmoiveSpider.pipelines.DBmoiveSpiderPipeline': 1,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
-# See http://doc.scrapy.org/en/latest/topics/autothrottle.html
-#AUTOTHROTTLE_ENABLED = True
-# The initial download delay
-#AUTOTHROTTLE_START_DELAY = 5
-# The maximum download delay to be set in case of high latencies
-#AUTOTHROTTLE_MAX_DELAY = 60
-# The average number of requests Scrapy should be sending in parallel to
-# each remote server
-#AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0
-# Enable showing throttling stats for every response received:
-#AUTOTHROTTLE_DEBUG = False
+AUTOTHROTTLE_ENABLED = True
+AUTOTHROTTLE_START_DELAY = 3 # The initial download delay
+AUTOTHROTTLE_MAX_DELAY = 60  # The maximum download delay to be set in case of high latencies
+AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0# The average number of requests Scrapy should be sending in parallel to each remote server
+
 
 # Enable and configure HTTP caching (disabled by default)
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
@@ -73,12 +58,22 @@ ITEM_PIPELINES = {
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 
-LOG_LEVEL = "DEBUG"
+LOG_LEVEL = "INFO"
 
-#广度优先
-DEPTH_PRIORITY = 1
-SCHEDULER_DISK_QUEUE = "scrapy.squeues.PickleFifoDiskQueue"
-SCHEDULER_MEMORY_QUEUE = "scrapy.squeues.FifoMemoryQueue"
+#深度优先
+DEPTH_LIMIT = 0 #爬取网站最大允许的深度(depth)值。如果为0，则没有限制
+DEPTH_PRIORITY = 0 #如果为0，则不根据深度进行优先级调整
+DNSCACHE_ENABLED = True #启用DNS内存缓存(DNS in-memory cache)
+
 
 import sys
 sys.setrecursionlimit(1000000)
+
+SCHEDULER = "DBmoiveSpider.scrapy_redis.scheduler.Scheduler"
+SCHEDULER_PERSIST = True
+SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.SpiderQueue'
+SCHEDULER_QUEUE_CLASS = "scrapy_redis.queue.SpiderStack"
+DUPEFILTER_CLASS = 'scrapy_redis.dupefilter.RFPDupeFilter'
+
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
