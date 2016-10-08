@@ -65,16 +65,14 @@ DEPTH_LIMIT = 0 #爬取网站最大允许的深度(depth)值。如果为0，则�
 DEPTH_PRIORITY = 0 #如果为0，则不根据深度进行优先级调整
 DNSCACHE_ENABLED = True #启用DNS内存缓存(DNS in-memory cache)
 
-
-import sys
-sys.setrecursionlimit(1000000)
+#
+# import sys
+# sys.setrecursionlimit(1000000)
 
 SCHEDULER = "scrapy_redis.scheduler.Scheduler"
 SCHEDULER_PERSIST = True
 SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.SpiderQueue'
-SCHEDULER_QUEUE_CLASS = "scrapy_redis.queue.SpiderStack"
-DUPEFILTER_CLASS = 'scrapy_redis.dupefilter.RFPDupeFilter'
-
+DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
 
 REDIS_HOST = 'localhost'
 REDIS_PORT = 6379
