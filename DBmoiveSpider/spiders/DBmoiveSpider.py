@@ -1,19 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from scrapy.spiders import CrawlSpider, Rule
-from scrapy_redis.spiders import RedisMixin
-from scrapy_redis import connection
 from scrapy.http import Request, FormRequest
-from scrapy.utils.project import get_project_settings
 from scrapy.linkextractors import LinkExtractor
 from bs4 import BeautifulSoup
 import re
 from ..items import DbmoivespiderItem
 
-QUEUE_KEY = 'DouBanMoives:requests' #默认redis的key
 
-
-class DBMoiveSpider(RedisMixin, CrawlSpider):
+class DBMoiveSpider(CrawlSpider):
     name = "DBmoive"
     allowed_domain = ["movie.douban"]
     start_urls = ["https://movie.douban.com/"]
@@ -23,9 +18,6 @@ class DBMoiveSpider(RedisMixin, CrawlSpider):
     }
 
     def __init__(self):
-        settings = get_project_settings()
-        self.queue_key = settings.get('SCHEDULER_QUEUE_KEY', QUEUE_KEY)
-        self.server = connection.from_settings(settings)
         self.headers = {
             "accept": "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
             "Accept-Encoding": "gzip, deflate, sdch, br",
@@ -37,7 +29,7 @@ class DBMoiveSpider(RedisMixin, CrawlSpider):
         }
         self.form_data = {
             'email': 'ziyangsong@foxmail.com',
-            'password': 'DIYUJUEWANGszy1'
+            'password': 'songziyang'
         }
         super(DBMoiveSpider, self).__init__()
 
@@ -138,4 +130,3 @@ class DBMoiveSpider(RedisMixin, CrawlSpider):
             item['StarDistribution'] = star_distribution
         else:
             item['StarDistribution'] = None
-

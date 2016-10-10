@@ -1,5 +1,4 @@
 import pymongo
-import redis
 
 client = pymongo.MongoClient('localhost', 27017)
 

@@ -40,6 +40,7 @@ USER_AGENT = ''
 
 ITEM_PIPELINES = {
    'DBmoiveSpider.pipelines.DBmoiveSpiderPipeline': 1,
+   # 'DBmoiveSpider.misc.ProxyMiddleware.CustomerProxyMiddleware' : 500
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
