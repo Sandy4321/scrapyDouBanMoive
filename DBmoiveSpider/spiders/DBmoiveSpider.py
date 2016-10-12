@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
+import re
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.http import Request, FormRequest
 from scrapy.linkextractors import LinkExtractor
 from bs4 import BeautifulSoup
-import re
 from ..items import DbmoivespiderItem
 
 
@@ -68,6 +68,7 @@ class DBMoiveSpider(CrawlSpider):
         self.get_voters(soup, item)
         self.get_star(soup, item)
         self.get_every_level_star(soup, item)
+        print(item)
         return item
 
     def get_name(self, soup, item):
@@ -114,9 +115,7 @@ class DBMoiveSpider(CrawlSpider):
 
     def get_star(self, soup, item):
         star = soup.find("strong", class_="ll rating_num", property="v:average")
-        print(star.get_text())
         if star is None or star.get_text() == '':
-            print('ok')
             item['Star'] = None
         else:
             item['Star'] = soup.find = star.get_text()

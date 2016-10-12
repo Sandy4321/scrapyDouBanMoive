@@ -1,5 +1,5 @@
-from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
 import random
+from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
 
 
 class CustomerUserAgentMiddleware(UserAgentMiddleware):
